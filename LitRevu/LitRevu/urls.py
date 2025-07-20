@@ -25,5 +25,6 @@ urlpatterns = [
     path('', views.homepage),
     path('', include('UserCustom.urls', namespace='UserCustom')),
     path('', include('Tickets.urls', namespace='Tickets')),
-    path('', include('Review.urls', namespace='Review'))
+    path('', include('Review.urls', namespace='Review')),
+    path('', include('UserFollows.urls', namespace='UserFollows'))
 ]

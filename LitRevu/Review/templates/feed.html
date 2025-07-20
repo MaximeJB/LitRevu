@@ -12,19 +12,25 @@
         {% if item.type == "review" %}
             <article class="review">
                     <h2>
-                        <a href ="{% url 'Review:review' slug=item.slug %}">
+                        <a href="{% url 'Review:review' slug=item.slug %}">
                         {{ item.headline }}
                         </a>
                     </h2>
                     <p>{{ item.time_created }}</p>
+                    <a href="{% url 'UserFollow:profil' username=item.user.username %}">
+                    <p>{{ item.user }}</p>
+                    </a>
                     <p>{{ item.body }}</p>
             </article>
 
     {% elif item.type == "tickets" %}
         <article class="ticket">
-            <h2><a href ="{% url 'Review:ticket' slug=item.slug %}">
+            <h2><a href="{% url 'Review:ticket' slug=item.slug %}">
             {{ item.title }}</h2>
             <p>{{ item.time_created }}</p>
+            <a href="{% url 'UserFollow:profil' username=item.user.username %}">
+            <p>{{ item.user }}</p>
+            </a>
             <p>{{ item.description }}</p>
         </article>
     {% endif %}

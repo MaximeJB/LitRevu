@@ -19,5 +19,3 @@ class Review(models.Model):
         blank=True,)
 
 
-#dans le models de tickets il faudrait mettre les mêmes noms genre 
-#headline, body, time_created, pck sur ticket c'est title, description

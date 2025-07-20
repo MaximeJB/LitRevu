@@ -13,7 +13,5 @@ class UserFollows(models.Model) :
         return f"{self.user} suit {self.followed_user}"
 
 class Meta:
-        # ensures we don't get multiple UserFollows instances
-        # for unique user-user_followed pairs
         unique_together = ('user', 'followed_user', )
 
