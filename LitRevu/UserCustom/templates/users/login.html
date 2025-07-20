@@ -1,0 +1,16 @@
+{% extends 'layout.html' %}
+
+{% load static %}
+
+{% block title %}
+    User login
+{% endblock %}
+
+{% block content %}
+    <h1> User login</h1>
+    <form class = "form-with-validation" action="{% url 'UserCustom:user-login' %}" method = "post">
+        {% csrf_token %}
+        {{ form }}
+        <button> submit </button>
+    </form>
+{% endblock %}

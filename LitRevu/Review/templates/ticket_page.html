@@ -1,0 +1,15 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+    {{ ticket.title }}
+{% endblock %}
+
+{% block content %}
+    <section>
+    <h1>{{ticket.title}}</h1>
+        <h2><a href ="{% url 'Review:edit_posts' slug=ticket.slug %}"> edit </a>
+        <section>
+            <p>{{ ticket.time_created }}</p>
+            <p>{{ ticket.description }}</p>
+            </section>
+{% endblock %}

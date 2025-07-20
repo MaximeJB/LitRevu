@@ -1,0 +1,33 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+    {{ review.title }}
+{% endblock %}
+
+{% block content %}
+    
+        <section>
+            <h2>{{ review.headline }}</h2>
+            <p>{{ review.time_created }}</p>
+            <p>{{ review.body }}</p>
+            <h2><a href ="{% url 'Review:edit_posts' slug=review.slug %}"> edit </a>
+        </section>
+
+        <section>
+        <h3>Commentaires :</h3>
+        {% for comment in comments %}
+            <p><strong>{{ comment.user }}</strong> : {{ comment.body }}</p>
+        {% empty %}
+            <p>Aucun commentaire pour l'instant.</p>
+        {% endfor %}
+        </section>
+
+        <section>
+        <h6>Laisser un commentaire</h6>
+        <form method="post" action="">
+            {% csrf_token %}
+            {{ comment_form.as_p }}
+            <button type="submit">Envoyer</button>
+        </form>
+    </section>
+{% endblock %}

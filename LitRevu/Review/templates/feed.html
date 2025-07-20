@@ -1,0 +1,33 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+    Feed
+{% endblock %}
+
+{% block content %}
+    <section>
+    <h1>Feed</h1>
+
+{% for item in feed %}
+        {% if item.type == "review" %}
+            <article class="review">
+                    <h2>
+                        <a href ="{% url 'Review:review' slug=item.slug %}">
+                        {{ item.headline }}
+                        </a>
+                    </h2>
+                    <p>{{ item.time_created }}</p>
+                    <p>{{ item.body }}</p>
+            </article>
+
+    {% elif item.type == "tickets" %}
+        <article class="ticket">
+            <h2><a href ="{% url 'Review:ticket' slug=item.slug %}">
+            {{ item.title }}</h2>
+            <p>{{ item.time_created }}</p>
+            <p>{{ item.description }}</p>
+        </article>
+    {% endif %}
+{% endfor %}
+    </section>
+    {% endblock %}

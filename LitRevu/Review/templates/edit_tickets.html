@@ -1,0 +1,18 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+  Modifier : {{ ticket.title }}
+{% endblock %}
+
+{% block content %}
+  <section>
+    <h1>Modifier le ticket : {{ ticket.title }}</h1>
+
+    <form method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit">Enregistrer</button>
+    </form>
+
+  </section>
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends 'layout.html' %}
+
+{% load static %}
+
+{% block title %}
+    Create a new ticket
+{% endblock %}
+{% block content %}
+    <h1> Create a new ticket</h1>
+    <form class="form-with-validation" action="" method="post">
+        {% csrf_token %}
+        {{ form }}
+        <button> submit </button>
+    </form>
+{% endblock %}
