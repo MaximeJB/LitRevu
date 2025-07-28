@@ -12,6 +12,3 @@ class Comment(models.Model):
     )  # optionnel mais recommandé
     body = models.TextField()
     time_created = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"Commentaire de {self.user.username} sur {self.review.title}"

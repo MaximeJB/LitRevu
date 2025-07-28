@@ -29,7 +29,7 @@
                 <a href="{% url 'UserCustom:user-login' %}">login</a>
             {% endif %}
             {% if request.user.is_authenticated %}
-                <form class="logout" action = "{% url 'UserCustom:user-logout' %}" {% csrf_token %}
+                <form class="logout" action = "{% url 'UserCustom:user-logout' %}" {% csrf_token %}>
                     <button class="logout-button" aria-label="User logout" title="User Logout">Se déconnecter</button>
                 </form>
             {% endif %}

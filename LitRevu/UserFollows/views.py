@@ -19,9 +19,10 @@ def follow_user(request, username):
     if request.user != follow_target:
         if not request.user.following.filter(id=follow_target.id).exists():
             UserFollows.objects.create(user=request.user, followed_user=follow_target)
+            messages.success(request, f"Vous suivez maintenant {follow_target.username}.")
         return redirect("UserFollow:profil", username=username)
     else:
-        redirect("homepage")
+        redirect("Review:feed")
 
 
 @login_required(login_url="/login")
@@ -52,7 +53,7 @@ def profile_view(request, username):
     )
     is_blocked = profile_user in request.user.blocked_user.all()
 
-    return render(
+    return  render(
         request,
         "users/profile_page.html",
         {
@@ -91,8 +92,6 @@ def unblock_user(request, username):
 
 @login_required
 def search_user(request):
-
-    # Targeting
     username = request.POST.get("username")
 
     try:

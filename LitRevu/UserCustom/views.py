@@ -51,9 +51,4 @@ def login_view(request):
 def logout_view(request):
     if request.method in ("GET", "POST"):
         logout(request)
-        return redirect(homepage)
-
-
-@login_required
-def logout_confirm(request):
-    return render(request, "logout_confirm.html")
+        return redirect('Review:feed')
