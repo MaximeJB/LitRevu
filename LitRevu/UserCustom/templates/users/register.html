@@ -1,15 +1,55 @@
 {% extends 'layout.html' %}
-
 {% load static %}
-
-{% block title %}
-    Register a New User
-{% endblock %}
+{% block title %}Register a New User{% endblock %}
 {% block content %}
-    <h1> Register a new user</h1>
-    <form class="form-with-validation" action="{% url 'UserCustom:user-register' %}" method="post">
-        {% csrf_token %}
-        {{ form }}
-        <button> submit </button>
-    </form>
+    <div class="standalone-register-page">
+        <!-- Bandeau supérieur -->
+        <div class="standalone-header">
+            <h1>LitReview</h1>
+        </div>
+        <!-- Contenu principal -->
+        <div class="standalone-content">
+            <h2>Inscrivez-vous</h2>
+            <form class="standalone-form"
+                  action="{% url 'UserCustom:user-register' %}"
+                  method="post">
+                {% csrf_token %}
+                <!-- Champ nom d'utilisateur -->
+                <div class="standalone-field">
+                    <label for="{{ form.username.id_for_label }}">Nom d'utilisateur</label>
+                    {{ form.username }}
+                    {% if form.username.errors %}
+                        <div class="standalone-errors">
+                            {% for error in form.username.errors %}<span class="standalone-error">{{ error }}</span>{% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+                <!-- Champ mot de passe -->
+                <div class="standalone-field">
+                    <label for="{{ form.password1.id_for_label }}">Mot de passe</label>
+                    {{ form.password1 }}
+                    {% if form.password1.errors %}
+                        <div class="standalone-errors">
+                            {% for error in form.password1.errors %}<span class="standalone-error">{{ error }}</span>{% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+                <!-- Champ confirmation mot de passe -->
+                <div class="standalone-field">
+                    <label for="{{ form.password2.id_for_label }}">Confirmer mot de passe</label>
+                    {{ form.password2 }}
+                    {% if form.password2.errors %}
+                        <div class="standalone-errors">
+                            {% for error in form.password2.errors %}<span class="standalone-error">{{ error }}</span>{% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+                <!-- Boutons d'action -->
+                <div class="standalone-buttons">
+                    <a href="{% url 'homepage' %}" class="standalone-btn-return">Retourner</a>
+                    <button type="submit" class="standalone-btn-submit">S'inscrire</button>
+                </div>
+            </form>
+        </div>
+    </div>
 {% endblock %}

@@ -1,16 +1,40 @@
 {% extends 'layout.html' %}
-
 {% load static %}
-
-{% block title %}
-    User login
-{% endblock %}
-
+{% block title %}LitRevu{% endblock %}
 {% block content %}
-    <h1> User login</h1>
-    <form class = "form-with-validation" action="{% url 'UserCustom:user-login' %}" method = "post">
-        {% csrf_token %}
-        {{ form }}
-        <button> submit </button>
-    </form>
+    <div class="auth-container">
+        <!-- Section inscription (gauche) -->
+        <div class="register-section">
+            <h2>Inscrivez-vous maintenant</h2>
+            <form method="post" class="register-form">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="register">
+                {{ register_form.as_p }}
+                <button type="submit" class="register-btn">S'inscrire</button>
+            </form>
+        </div>
+        <!-- Section connexion (droite) -->
+        <div class="login-section">
+            <h2>Connectez-vous</h2>
+            <form class="form-with-validation"
+                  action="{% url 'UserCustom:user-login' %}"
+                  method="post">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="login">
+                <div class="login-form">
+                    <div class="login-field">
+                        {{ login_form.username.label_tag }}
+                        {{ login_form.username }}
+                    </div>
+                    <div class="login-field">
+                        {{ login_form.password.label_tag }}
+                        {{ login_form.password }}
+                    </div>
+                </div>
+                <div class="login-btn-container">
+                    <button type="submit" class="login-btn">Se connecter</button>
+                </div>
+            </form>
+        </div>
+    </div>
 {% endblock %}

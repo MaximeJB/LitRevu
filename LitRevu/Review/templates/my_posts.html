@@ -1,0 +1,32 @@
+{% extends 'layout.html' %}
+{% block title %}Mes posts{% endblock %}
+{% block content %}
+    <section>
+        <h1>Mes posts</h1>
+        {% if posts %}
+            {% for item in posts %}
+                <div class="block">
+                    <div class="meta">
+                        <span>{{ item.user.username }}</span>
+                        <span>{{ item.time_created|date:"d/m/Y H:i" }}</span>
+                    </div>
+                    {% if item.type == 'review' %}
+                        <div>
+                            <strong>Review : {{ item.headline }}</strong> — {{ item.rating }}
+                            <a href="{% url 'Review:edit_posts' item.slug %}" class ="modify-btn">Modifier</a>
+                        </div>
+                        <p>{{ item.body }}</p>
+                    {% elif item.type == 'tickets' %}
+                        <div>
+                            <strong>Ticket : {{ item.title }}</strong>
+                            <a href="{% url 'Review:edit_posts' item.slug %}" class="modify-btn">Modifier</a>
+                        </div>
+                        <p>{{ item.description }}</p>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>Vous n'avez encore posté aucune review ni ticket.</p>
+        {% endif %}
+    </section>
+{% endblock %}

@@ -1,12 +1,10 @@
 {% extends "layout.html" %}
-
 {% block content %}
-  <h2>Confirmer la déconnexion</h2>
-  <p>Es-tu sûr de vouloir te déconnecter ?</p>
-
-  <form method="post" action="{% url 'user-logout' %}">
-    {% csrf_token %}
-    <button type="submit">Se déconnecter</button>
-  </form>
-  <a href="{% url 'feed' %}">Annuler</a>
+    <h2>Confirmer la déconnexion</h2>
+    <p>Es-tu sûr de vouloir te déconnecter ?</p>
+    <form method="post" action="{% url 'user-logout' %}">
+        {% csrf_token %}
+        <button type="submit">Se déconnecter</button>
+    </form>
+    <a href="{% url 'feed' %}">Annuler</a>
 {% endblock %}

@@ -1,33 +1,71 @@
 {% extends 'layout.html' %}
-
-{% block title %}
-    {{ review.title }}
-{% endblock %}
-
+{% block title %}{{ review.title }}{% endblock %}
 {% block content %}
-    
-        <section>
-            <h2>{{ review.headline }}</h2>
-            <p>{{ review.time_created }}</p>
-            <p>{{ review.body }}</p>
-            <h2><a href ="{% url 'Review:edit_posts' slug=review.slug %}"> edit </a>
-        </section>
-
-        <section>
-        <h3>Commentaires :</h3>
-        {% for comment in comments %}
-            <p><strong>{{ comment.user }}</strong> : {{ comment.body }}</p>
-        {% empty %}
-            <p>Aucun commentaire pour l'instant.</p>
-        {% endfor %}
-        </section>
-
-        <section>
-        <h6>Laisser un commentaire</h6>
-        <form method="post" action="">
+    <div class="block review-block">
+        <div class="review-header">
+            <div class="author">Par {{ review.user }}</div>
+            <div class="date">{{ review.time_created|date:"d/m/Y à H:i" }}</div>
+        </div>
+        <div class="review-clear"></div>
+        <h2 class="review-title">{{ review.headline }}</h2>
+        {% if review.rating %}
+            <div class="rating">
+                <span class="stars">
+                    {% for i in "12345" %}
+                        {% if forloop.counter <= review.rating %}
+                            ★
+                        {% else %}
+                            ☆
+                        {% endif %}
+                    {% endfor %}
+                </span>
+            </div>
+        {% endif %}
+        <div class="review-content">{{ review.body|linebreaks }}</div>
+        {% if review.ticket.image %}
+            <div class="image-container">
+                <img src="{{ review.ticket.image.url }}" alt="{{ review.ticket.title }}">
+            </div>
+        {% endif %}
+        {% if request.user == review.user %}
+            <a href="{% url 'Review:edit_posts' slug=review.slug %}"
+               class="modify-btn">Modifier</a>
+        {% endif %}
+    </div>
+    <div class="block comments-section">
+        <h3 class="comments-title">Commentaires</h3>
+        {% if comments %}
+            <div class="comments-list">
+                {% for comment in comments %}
+                    <div class="comment-item">
+                        <p class="comment-meta">
+                            <strong>{{ comment.user }}</strong> - {{ comment.created_at|date:"d/m/Y à H:i" }}
+                        </p>
+                        <p class="comment-body">{{ comment.body|linebreaks }}</p>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="no-comments">Aucun commentaire pour l'instant.</p>
+        {% endif %}
+    </div>
+    <!-- Section formulaire de commentaire -->
+    <div class="block comment-form-section">
+        <h3 class="comment-form-title">Laisser un commentaire</h3>
+        <form method="post" action="" class="comment-form">
             {% csrf_token %}
-            {{ comment_form.as_p }}
-            <button type="submit">Envoyer</button>
+            <div class="form-group">
+                <label for="{{ comment_form.body.id_for_label }}">Votre commentaire :</label>
+                {{ comment_form.body }}
+                {% if comment_form.body.errors %}
+                    <div class="errorlist">
+                        {% for error in comment_form.body.errors %}<span class="comment-error">{{ error }}</span>{% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            <div class="submit-container">
+                <button type="submit" class="submit-btn">Envoyer</button>
+            </div>
         </form>
-    </section>
+    </div>
 {% endblock %}

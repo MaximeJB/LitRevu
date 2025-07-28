@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+{% block title %}Commenter « {{ review.headline }} »{% endblock %}
+{% block content %}
+    <h1>Commentaire pour : {{ review.headline }}</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+        <div class="form-group">
+            {{ form.body.label_tag }}
+            {{ form.body }}
+            {{ form.body.errors }}
+        </div>
+        <button type="submit" class="btn btn-primary">Envoyer</button>
+    </form>
+{% endblock %}

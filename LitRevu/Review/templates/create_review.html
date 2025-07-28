@@ -1,0 +1,88 @@
+{% extends 'layout.html' %}
+{% block title %}Créer une critique{% endblock %}
+{% block content %}
+    <div class="create-review-page">
+        <h1>Créer une critique</h1>
+        <div class="create-review-container">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <!-- Section Livre/Article -->
+                <div class="book-section">
+                    <h2>Livre / Article</h2>
+                    {% if ticket %}
+                        <input type="hidden" name="ticket_id" value="{{ ticket.id }}">
+                        <div class="existing-ticket">
+                            <p>
+                                <strong>{{ ticket.title }}</strong>
+                            </p>
+                            <p>{{ ticket.description }}</p>
+                            {% if ticket.image %}<img src="{{ ticket.image.url }}" alt="{{ ticket.title }}">{% endif %}
+                        </div>
+                    {% else %}
+                        {{ ticket_form.non_field_errors }}
+                        <div class="form-field-review">
+                            <label for="{{ ticket_form.title.id_for_label }}">Titre</label>
+                            {{ ticket_form.title }}
+                        </div>
+                        <div class="form-field-review">
+                            <label for="{{ ticket_form.description.id_for_label }}">Description</label>
+                            {{ ticket_form.description }}
+                        </div>
+                        <div class="form-field-review">
+                            <label for="{{ ticket_form.image.id_for_label }}">Image</label>
+                            {{ ticket_form.image }}
+                        </div>
+                    {% endif %}
+                </div>
+                <!-- Ligne de séparation -->
+                <div class="review-separator"></div>
+                <!-- Section Critique -->
+                <div class="critique-section">
+                    <h2>Critique</h2>
+                    {% if not ticket %}{{ form.non_field_errors }}{% endif %}
+                    <div class="form-field-review">
+                        <label for="{{ form.headline.id_for_label }}">Titre</label>
+                        {{ form.headline }}
+                    </div>
+                    <div class="rating-field">
+                        <label>Note</label>
+                        <div class="rating-options">
+                            <div class="rating-option">
+                                <input type="radio" name="rating" value="0" id="rating_0">
+                                <label for="rating_0">0</label>
+                            </div>
+                            <div class="rating-option">
+                                <input type="radio" name="rating" value="1" id="rating_1">
+                                <label for="rating_1">1</label>
+                            </div>
+                            <div class="rating-option">
+                                <input type="radio" name="rating" value="2" id="rating_2">
+                                <label for="rating_2">2</label>
+                            </div>
+                            <div class="rating-option">
+                                <input type="radio" name="rating" value="3" id="rating_3">
+                                <label for="rating_3">3</label>
+                            </div>
+                            <div class="rating-option">
+                                <input type="radio" name="rating" value="4" id="rating_4">
+                                <label for="rating_4">4</label>
+                            </div>
+                            <div class="rating-option">
+                                <input type="radio" name="rating" value="5" id="rating_5">
+                                <label for="rating_5">5</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-field-review">
+                        <label for="{{ form.body.id_for_label }}">Commentaire</label>
+                        {{ form.body }}
+                    </div>
+                </div>
+                <!-- Bouton envoyer -->
+                <div class="submit-review-container">
+                    <button type="submit" class="submit-review-btn">Envoyer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}

@@ -1,89 +1,126 @@
 {% extends 'layout.html' %}
-
-{% block title %}
-    Profil de {{ profile_user.username }}
-{% endblock %}
-
 {% block content %}
-<section class="profile-header">
-    <h1>{{ profile_user.username }}</h1>
-
-    {# Bouton Follow/Unfollow #}
-    {% if request.user.is_authenticated and request.user != profile_user %}
-    <div class="follow-btn">
-        {% if is_following %}
-        <form action="{% url 'UserFollow:unfollow-user' username=profile_user.username %}" method="post">
+    <div class="user-search-section">
+        <h2 class="user-search-title">Suivre d'autres utilisateurs</h2>
+        <form method="post" action="{% url 'UserFollow:search-user' %}">
             {% csrf_token %}
-            <button type="submit">Unfollow</button>
+            <div class="search-container">
+                <input type="text"
+                       name="username"
+                       class="search-input"
+                       placeholder="Rechercher un utilisateur..."
+                       required>
+                <button type="submit" class="search-btn">Rechercher</button>
+            </div>
         </form>
+    </div>
+    <!-- Profil utilisateur (bloc avec nom + stats) -->
+    <div class="block profile-user-block">
+        <div class="profile-info">
+            <h1>{{ profile_user.username }}</h1>
+            <div class="user-stats">
+                <span>{{ reviews_count }} review
+                    {% if reviews_count > 1 %}s{% endif %}
+                </span>
+                <span>{{ tickets_count }} ticket
+                    {% if tickets_count > 1 %}s{% endif %}
+                </span>
+            </div>
+        </div>
+        <div class="profile-actions">
+            {% if request.user.is_authenticated and request.user != profile_user %}
+                {% if is_following %}
+                    <form method="post"
+                          action="{% url 'UserFollow:unfollow-user' profile_user.username %}">
+                        {% csrf_token %}
+                        <button type="submit" class="unfollow-btn">Unfollow</button>
+                    </form>
+                {% else %}
+                    <form method="post"
+                          action="{% url 'UserFollow:follow-user' profile_user.username %}">
+                        {% csrf_token %}
+                        <button type="submit" class="follow-btn">Follow</button>
+                    </form>
+                {% endif %}
+                {% if is_blocked %}
+                    <form method="post"
+                          action="{% url 'UserFollow:unblock-user' profile_user.username %}"
+                          class="block-user-form">
+                        {% csrf_token %}
+                        <button type="submit" class="unblock-btn">Débloquer</button>
+                    </form>
+                {% else %}
+                    <form method="post"
+                          action="{% url 'UserFollow:block-user' profile_user.username %}"
+                          class="block-user-form">
+                        {% csrf_token %}
+                        <button type="submit" class="block-btn">Bloquer</button>
+                    </form>
+                {% endif %}
+            {% endif %}
+        </div>
+    </div>
+    <!-- Bloc derniers commentaires -->
+    <div class="block">
+        <h3>Derniers commentaires</h3>
+        {% if latest_comments %}
+            <div class="comments-list">
+                {% for comment in latest_comments %}
+                    <div class="comment-item">
+                        <p>
+                            le {{ comment.time_created|date:"d/m/Y H:i" }} —
+                            <a href="{% url 'Review:review' comment.review.slug %}">{{ comment.review.headline }}</a>
+                        </p>
+                        <p>{{ comment.body|truncatechars:100 }}</p>
+                    </div>
+                {% endfor %}
+            </div>
         {% else %}
-        <form action="{% url 'UserFollow:follow-user' username=profile_user.username %}" method="post">
-            {% csrf_token %}
-            <button type="submit">Follow</button>
-        </form>
+            <p>Aucun commentaire publié récemment.</p>
         {% endif %}
     </div>
-    {% endif %}
-
-    <div class="stats-overview">
-        <span><strong>{{ reviews_count }}</strong> review{% if reviews_count > 1 %}s{% endif %}</span>
-        <span><strong>{{ tickets_count }}</strong> ticket{% if tickets_count > 1 %}s{% endif %}</span>
-    </div>
-</section>
-
-<section class="profile-latest-activity">
-    <h2>Derniers commentaires</h2>
-    {% if latest_comments %}
-        <ul>
-            {% for comment in latest_comments %}
-                <li>
-                    <small>le {{ comment.time_created|date:"d/m/Y H:i" }}</small> —
-                    <a href="{% url 'Review:review' slug=comment.review.slug %}">
-                        {{ comment.review.headline }}
-                    </a>
-                    <p>{{ comment.body|truncatechars:100 }}</p>
-                </li>
+    <div class="subscriptions-section">
+        <h3 class="subscriptions-title">Abonnements</h3>
+        {% if following %}
+            {% for relation in following|slice:":3" %}
+                <div class="subscription-item">
+                    <span class="subscription-username">
+                        <a href="{% url 'UserFollow:profil' relation.followed_user.username %}">{{ relation.followed_user.username }}</a>
+                    </span>
+                    {% if request.user == profile_user %}
+                        <form method="post"
+                              action="{% url 'UserFollow:unfollow-user' relation.followed_user.username %}"
+                              class="unsubscribe-form">
+                            {% csrf_token %}
+                            <button type="submit" class="unsubscribe-btn">Désabonner</button>
+                        </form>
+                    {% endif %}
+                </div>
             {% endfor %}
-        </ul>
-    {% else %}
-        <p>Aucun commentaire publié récemment.</p>
-    {% endif %}
-</section>
-
-{# Section Abonnements et Abonnés #}
-<section class="profile-connections">
-    <div class="subscriptions">
-        <h2>Abonnements</h2>
-        {% if profile_user.following.all %}
-            <ul>
-                {% for relation in following %}
-                    <li>
-                        <a href="{% url 'UserFollow:profil' username=relation.followed_user.username %}">
-                            {{ relation.followed_user.username }}
-                        </a>
-                    </li>
-                {% endfor %}
-            </ul>
         {% else %}
-            <p>Vous ne suivez personne pour l'instant.</p>
+            {% if request.user == profile_user %}
+                <p>Vous ne suivez personne pour l'instant.</p>
+            {% else %}
+                <p>{{ profile_user.username }} ne suit personne pour l'instant.</p>
+            {% endif %}
         {% endif %}
     </div>
-
-    <div class="followers">
-        <h2>Abonnés</h2>
-        {% if profile_user.followed_by.all %}
-            <ul>
-                {% for relation in followers %}
-                    <li>
-                        <a href="{% url 'UserFollow:profil' username=relation.user.username %}">
-                            {{ relation.user.username }}
-                        </a>
-                    </li>
-                {% endfor %}
-            </ul>
+    <div class="followers-section">
+        <h3 class="followers-title">Abonnés</h3>
+        {% if followers %}
+            {% for relation in followers %}
+                <div class="follower-item">
+                    <span class="follower-username">
+                        <a href="{% url 'UserFollow:profil' relation.user.username %}">{{ relation.user.username }}</a>
+                    </span>
+                </div>
+            {% endfor %}
         {% else %}
-            <p>Vous n'avez pas encore d'abonnés.</p>
+            {% if request.user == profile_user %}
+                <p>Vous n'avez pas encore d'abonnés.</p>
+            {% else %}
+                <p>{{ profile_user.username }} n'a pas encore d'abonnés.</p>
+            {% endif %}
         {% endif %}
     </div>
-</section>
 {% endblock %}

@@ -1,56 +1,1044 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
+/* Styles existants conservés */
 body {
-    min-height: 100vh;
-    background-color: black;
-    color: whitesmoke;
-    font-size: 3rem;
-    display: flex;
-    flex-flow: column;
+  background-color: white;
+  font-family: "Helvetica Neue", Arial, sans-serif;
+  font-size: 14px;
+  color: #333;
+  padding: 20px;
 }
 
 nav {
-    padding: 1rem;
-    background-color: #44B78B;
+  border: 1px solid black;
+  padding: 10px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+nav a, nav button {
+  font-size: 14px;
+  background: none;
+  border: 1px solid black;
+  padding: 6px 10px;
+  text-decoration: none;
+  color: #333;
+  cursor: pointer;
+}
+
+nav a:hover, nav button:hover {
+  background-color: #f0f0f0;
+}
+
+main:not(.standalone-register-page) {
+  border: 1px solid black;
+  padding: 20px;
+}
+
+.block {
+  border: 1px solid #aaa;
+  padding: 15px;
+  margin-bottom: 20px;
+}
+
+/* Styles pour les messages Django */
+.messages {
+    margin: 20px 0;
+}
+
+.alert {
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    position: relative;
+}
+
+.alert-success {
+    color: #3c763d;
+    background-color: #dff0d8;
+    border-color: #d6e9c6;
+}
+
+.alert-error {
+    color: #a94442;
+    background-color: #f2dede;
+    border-color: #ebccd1;
+}
+
+.alert-warning {
+    color: #8a6d3b;
+    background-color: #fcf8e3;
+    border-color: #faebcc;
+}
+
+.alert-info {
+    color: #31708f;
+    background-color: #d9edf7;
+    border-color: #bce8f1;
+}
+
+.alert {
+    animation: fadeIn 0.5s;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.review-header {
+    display: flex;
+    justify-content: space-between;
+}
+
+.review-header .author {
+    float: left;
+}
+
+.review-header .date {
+    float: right;
+}
+
+.ticket-block {
+    margin-top: 15px;
+    border: 1px solid;
+    padding: 10px;
+}
+
+.review-block {
+  background-color: #ffffff;
+}
+
+.ticket-block {
+  margin-top: 15px;
+  border: 1px dashed #000000;
+  padding: 10px;
+  background-color: #fff;
+}
+
+.ticket-header {
+    display: flex;
+    justify-content: space-between;
+}
+
+.ticket-header .ticket-title {
+    float: left;
+}
+
+.ticket-header .ticket-author {
+    float: right;
+}
+
+.image-container {
+    text-align: center;
+    margin: 15px 0;
+}
+
+.image-container img {
+    max-width: 200px;
+    height: auto;
+}
+
+/* NOUVEAUX STYLES POUR LA PAGE LOGIN/INSCRIPTION */
+
+
+.auth-container {
+    display: flex;
+    gap: 40px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+/* Section inscription (gauche) */
+.register-section {
+    flex: 1;
+    padding: 30px;
+}
+
+.register-section h2 {
+    font-size: 18px;
+    margin-bottom: 20px;
+    margin-top: 0;
+    font-weight: normal;
+}
+
+.register-form {
+    background-color: #f5f5f5;
+    border: 1px solid #ddd;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.register-form p {
+    margin-bottom: 15px;
+}
+
+.register-form label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: normal;
+}
+
+.register-form input[type="text"],
+.register-form input[type="email"],
+.register-form input[type="password"] {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    font-family: inherit;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+.register-form .errorlist {
+    color: #a94442;
+    list-style: none;
+    padding: 0;
+    margin: 5px 0 0 0;
+    font-size: 12px;
+}
+
+/* STYLES POUR LA PAGE CRÉER UN TICKET */
+
+.ticket-creation-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.ticket-creation-container h1 {
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 40px;
+    font-weight: normal;
+}
+
+.ticket-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    margin-bottom: 8px;
+    font-weight: normal;
+    font-size: 14px;
+}
+
+.form-group input[type="text"],
+.form-group textarea {
+    padding: 10px;
+    border: 1px solid #ccc;
+    font-family: inherit;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+.form-group input[type="text"] {
+    height: 40px;
+}
+
+.form-group textarea {
+    height: 300px;
+    resize: vertical;
+}
+
+.form-group input[type="file"] {
+    padding: 8px;
+    border: 1px solid #ccc;
+    background-color: #f9f9f9;
+    font-family: inherit;
+    font-size: 14px;
+}
+
+.submit-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+.submit-btn {
+    background-color: #333;
     color: white;
-    font-size: 2.5rem;
+    border: none;
+    padding: 12px 24px;
+    font-size: 14px;
+    cursor: pointer;
+    font-family: inherit;
 }
 
-main {
-    flex-grow: 1;
-    display: grid;
-    place-content: center;
+/* Masquer les textes d'aide Django */
+.register-form .helptext,
+.register-form small,
+.register-section .helptext,
+.register-section small {
+    display: none !important;
 }
 
-h1,
-p {
+.register-btn {
+    background-color: #333;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 14px;
+    cursor: pointer;
+    font-family: inherit;
+}
+
+.register-btn:hover {
+    background-color: #555;
+}
+
+/* Section connexion (droite) */
+.login-section {
+    flex: 1;
+    padding: 30px;
+}
+
+.login-section h2 {
+    font-size: 18px;
+    margin-bottom: 20px;
+    margin-top: 0;
+    font-weight: normal;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.login-field {
+    background-color: #f5f5f5;
+    border: 1px solid #ddd;
+    padding: 15px;
+}
+
+.login-field label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: normal;
+}
+
+.login-field input[type="text"],
+.login-field input[type="password"] {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    font-family: inherit;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+.login-btn-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 10px;
+}
+
+.login-btn {
+    background-color: #333;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 14px;
+    cursor: pointer;
+    font-family: inherit;
+}
+
+.login-field .errorlist {
+    color: #a94442;
+    list-style: none;
+    padding: 0;
+    margin: 5px 0 0 0;
+    font-size: 12px;
+}
+.user-search-section {
+    text-align: center;
+    margin-bottom: 30px;
+    padding: 20px;
+    border: 1px solid #ddd;
+}
+
+.user-search-title {
+    font-size: 18px;
+    margin-bottom: 15px;
+    font-weight: normal;
+}
+
+.search-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.search-input {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    font-family: inherit;
+}
+
+.search-btn {
+    background-color: #333;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    font-size: 14px;
+    cursor: pointer;
+    font-family: inherit;
+}
+
+.search-btn:hover {
+    background-color: #555;
+}
+
+/* Section résultats de recherche */
+.search-results-section {
+    margin-top: 20px;
+    text-align: left;
+}
+
+.search-results-section h3 {
+    font-size: 16px;
+    margin-bottom: 10px;
+    font-weight: normal;
+}
+
+/* Section abonnements */
+.subscriptions-section {
+    margin-top: 30px;
     text-align: center;
 }
 
-a {
+.subscriptions-title {
+    font-size: 16px;
+    margin-bottom: 15px;
+    font-weight: normal;
+}
+
+.subscription-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    margin-bottom: 8px;
+    background-color: #f9f9f9;
+}
+
+.subscription-username {
+    font-size: 14px;
+}
+
+.unsubscribe-btn {
+    background-color: #d9534f;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    font-size: 12px;
+    cursor: pointer;
+    font-family: inherit;
+}
+
+.unsubscribe-btn:hover {
+    background-color: #c9302c;
+}
+
+/* Section abonnés */
+.followers-section {
+    margin-top: 30px;
+    text-align: center;
+}
+
+.followers-title {
+    font-size: 16px;
+    margin-bottom: 15px;
+    font-weight: normal;
+}
+
+.follower-item {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    margin-bottom: 8px;
+    background-color: #f9f9f9;
+}
+
+.follower-username {
+    font-size: 14px;
+}
+.action-buttons {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 30px;
+    justify-content: flex-start;
+}
+.action-buttons .btn {
+    background-color: white;
+    color: black;
+    border: 1px solid #333;
+    padding: 10px 20px;
+    font-size: 14px;
+    cursor: pointer;
+    font-family: inherit;
+}
+
+.action-buttons .btn:hover {
+   background-color: #555;
+}
+.ticket-block img,
+.block img {
+    max-width: 150px;
+    height: auto;
+    display: block;
+    margin: 15px 0;
+    border: 1px solid #ddd;
+}
+
+/* Bouton "Créer une critique" sur les tickets */
+.ticket-review-btn {
+    background-color: white;
+    color: black;
+    border: 1px solid #333;
+    padding: 8px 16px;
+    font-size: 12px;
+    cursor: pointer;
+    font-family: inherit;
+    display: inline-block;
+    position: relative;
     text-decoration: none;
-    color: #81dbb8;
+    margin-top: 15px;
 }
 
-a:hover {
-    opacity: .85;
+.ticket-review-btn:hover {
+    background-color: #f0f0f0;
+    color:black;
+}
+/* Star/ rating */
+.rating {
+    margin: 10px 0;
 }
 
-
-.logout {
-    display: inline-block
+.stars {
+    color: #ffc107;
+    font-size: 16px;
 }
 
-.logout-button {
-    font-size: 2.5rem;
-    background-color: black;
+/* Standalone = Style pour la page d'inscription (autonome du login) */
+.standalone-register-page {
+    max-width: 500px;
+    margin: 50px auto;
+    border: 1px solid #000;
+    background-color: white;
+}
+
+.standalone-header {
+    background-color: #f8f8f8;
+    border-bottom: 1px solid #000;
+    padding: 15px;
+    text-align: center;
+}
+
+.standalone-header h1 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: normal;
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    color: #333;
+}
+
+.standalone-content {
+    padding: 40px 30px;
+    text-align: center;
+}
+
+.standalone-content h2 {
+    margin: 0 0 30px 0;
+    font-size: 18px;
+    font-weight: normal;
+    color: #333;
+}
+
+.standalone-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.standalone-field {
+    text-align: left;
+}
+
+.standalone-field label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 14px;
+    font-weight: normal;
+    background-color: transparent;
+    border: none;
+    padding: 0;
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    color: #333;
+    text-align: center;
+}
+
+.standalone-field input[type="text"],
+.standalone-field input[type="password"] {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ccc;
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-size: 14px;
+    box-sizing: border-box;
+    background-color: white;
+    color: #333;
+}
+
+.standalone-field input:focus {
+    outline: none;
+    border-color: #333;
+}
+
+.standalone-errors {
+    margin-top: 5px;
+}
+
+.standalone-error {
+    display: block;
+    color: #a94442;
+    font-size: 12px;
+    margin-bottom: 3px;
+    font-family: "Helvetica Neue", Arial, sans-serif;
+}
+
+.standalone-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 30px;
+}
+
+.standalone-btn-return,
+.standalone-btn-submit {
+    padding: 10px 20px;
+    font-size: 14px;
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    cursor: pointer;
+    border: 1px solid #333;
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+}
+
+.standalone-btn-return {
+    background-color: white;
+    color: #333;
+}
+
+.standalone-btn-return:hover {
+    background-color: #f0f0f0;
+}
+
+.standalone-btn-submit {
+    background-color: #333;
+    color: white;
     border: none;
 }
 
-.logout-button:hover {
-    opacity: .85;
+.standalone-btn-submit:hover {
+    background-color: #555;
+}
+
+
+.standalone-form .helptext,
+.standalone-form small {
+    display: none !important;
+}
+.standalone-register-page ~ nav,
+body:has(.standalone-register-page) nav {
+    display: none;
+}
+/* STYLES POUR LA PAGE CRÉER UNE CRITIQUE */
+
+.create-review-page {
+    max-width: 700px;
+    margin: 30px auto;
+    text-align: center;
+}
+
+.create-review-page h1 {
+    font-size: 24px;
+    font-weight: normal;
+    margin-bottom: 30px;
+    color: #333;
+}
+
+.create-review-container {
+    border: 1px solid #000;
+    background-color: white;
+    padding: 30px;
+    text-align: left;
+}
+
+
+.create-review-container .form-group {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.create-review-container .form-group label {
+    margin-bottom: 8px; 
+    font-size: 14px;
+    font-weight: normal;
+    color: #333;
+    order: 1;
+}
+
+.create-review-container h2 {
+    font-size: 16px;
+    font-weight: normal;
+    text-align: right;
+    margin: 0 0 20px 0;
+    color: #333;
+}
+.create-review-container .form-group input,
+.create-review-container .form-group select,
+.create-review-container .form-group textarea {
+    order: 2;
+    padding: 10px 12px;
+    border: 1px solid #ccc;
+    font-family: "Helvetica Neue", Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    width: 100%;
+    box-sizing: border-box;
+}
+.create-review-container .form-group textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+.review-separator {
+    border-top: 1px solid #000;
+    margin: 30px 0;
+}
+
+
+.rating-field {
+    margin-bottom: 20px;
+}
+
+.rating-options {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.rating-option {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border: 1px solid #333;
+    border-radius: 50%;
+    background-color: white;
+    cursor: pointer;
+    font-size: 14px;
+    color: #333;
+}
+
+.rating-option:hover {
+    background-color: #f0f0f0;
+}
+
+.rating-option input[type="radio"] {
+    display: none;
+}
+
+.rating-option.selected {
+    background-color: #333;
+    color: white;
+}
+
+
+.existing-ticket {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    padding: 15px;
+    margin-bottom: 20px;
+}
+ /* SECTION PROFILE PAGE */
+.profile-user-block {
+    border: 1px solid #aaa;
+    padding: 15px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.profile-info h1 {
+    margin: 0 0 10px 0;
+    font-size: 24px;
+    font-weight: normal;
+}
+
+.profile-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 10px;
+}
+
+.follow-btn, .unfollow-btn {
+    background-color: #333;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    font-size: 12px;
+    cursor: pointer;
+    font-family: inherit;
+}
+
+.follow-btn:hover, .unfollow-btn:hover {
+    background-color: #555;
+}
+
+.user-stats {
+    display: flex;
+    gap: 20px;
+    margin-top: 10px;
+    font-size: 14px;
+    color: #666;
+}
+.comments-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.comment-item {
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+}
+
+.comment-item:last-child {
+    border-bottom: none;
+}
+
+.comment-item p {
+    margin: 5px 0;
+    line-height: 1.4;
+}
+.comment-item a {
+    color: #333;
+    text-decoration: underline;
+}
+
+.comment-item a:hover {
+    color: #555;
+}
+.block-user-form {
+    margin-top: 15px;
+}
+
+.block-btn, .unblock-btn {
+    background-color: #d9534f;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    font-size: 12px;
+    cursor: pointer;
+    font-family: inherit;
+}
+
+.block-btn:hover, .unblock-btn:hover {
+    background-color: #c9302c;
+}
+.subscription-item a,
+.follower-item a {
+    color: #333;
+    text-decoration: none;
+    font-weight: normal;
+}
+
+.subscription-item a:hover,
+.follower-item a:hover {
+    text-decoration: underline;
+}
+.modify-btn {
+    background-color: white;
+    color: black;
+    border: 1px solid #333;
+    padding: 8px 16px;
+    font-size: 12px;
+    cursor: pointer;
+    font-family: inherit;
+    display: inline-block;
+    position: relative;
+    text-decoration: none;
+    margin-top: 15px;
+    margin-left: 10px; /* Décalage vers la droite */
+}
+
+.modify-btn:hover {
+    background-color: #f0f0f0;
+    color: black;
+}
+.review-clear {
+    clear: both;
+}
+
+/* Titre principal de la critique */
+.review-title {
+    margin: 15px 0 10px 0;
+    font-size: 20px;
+    font-weight: normal;
+}
+
+/* Contenu de la critique */
+.review-content {
+    margin: 15px 0;
+    line-height: 1.5;
+}
+.comments-title {
+    margin: 0 0 20px 0;
+    font-size: 16px;
+    font-weight: normal;
+}
+
+/* Message quand il n'y a pas de commentaires */
+.no-comments {
+    color: #666;
+    font-style: italic;
+}
+
+/* Métadonnées des commentaires (auteur et date) */
+.comment-meta {
+    margin: 5px 0;
+    line-height: 1.4;
+}
+
+/* Corps du commentaire */
+.comment-body {
+    margin: 5px 0;
+    line-height: 1.4;
+}
+.comment-form-title {
+    margin: 0 0 20px 0;
+    font-size: 16px;
+    font-weight: normal;
+}
+
+/* Formulaire de commentaire spécifique */
+.comment-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.comment-form .form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.comment-form .form-group label {
+    margin-bottom: 8px;
+    font-weight: normal;
+    font-size: 14px;
+}
+
+.comment-form .form-group textarea {
+    padding: 10px;
+    border: 1px solid #ccc;
+    font-family: inherit;
+    font-size: 14px;
+    box-sizing: border-box;
+    min-height: 100px;
+    resize: vertical;
+}
+
+/* Erreurs spécifiques au formulaire de commentaire */
+.comment-error {
+    display: block;
+    color: #a94442;
+    font-size: 12px;
+    margin-bottom: 3px;
+}
+/* STYLES POUR LES LIENS DE TITRE DE CRITIQUE DANS LE FEED */
+
+.review-title-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+.review-title-link:hover {
+    text-decoration: none;
+    color: inherit;
+}
+
+.review-title-clickable {
+    font-size: 18px;
+    font-weight: normal;
+    margin: 10px 0;
+    color: #333;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.review-title-clickable:hover {
+    color: #000;
+    text-decoration: underline;
+}
+.review-title-subtle {
+    font-size: 16px;
+    font-weight: normal;
+    margin: 10px 0;
+    color: #333;
+    cursor: pointer;
+}
+
+.review-title-subtle:hover {
+    color: #555;
+}
+.modify-page {
+    max-width: 700px;
+    margin: 30px auto;
+    text-align: center;
+}
+
+.modify-page h1 {
+    font-size: 24px;
+    font-weight: normal;
+    margin-bottom: 30px;
+    color: #333;
+}
+
+/* Réutilise le style de create-review-container */
+.modify-container {
+    border: 1px solid #000;
+    background-color: white;
+    padding: 30px;
+    text-align: left;
+}
+
+/* Réutilise le style existant de ticket-form pour la cohérence */
+.modify-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }

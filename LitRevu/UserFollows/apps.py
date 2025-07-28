@@ -2,5 +2,5 @@ from django.apps import AppConfig
 
 
 class UserfollowsConfig(AppConfig):
-    default_auto_field = 'django.db.models.BigAutoField'
-    name = 'UserFollows'
+    default_auto_field = "django.db.models.BigAutoField"
+    name = "UserFollows"

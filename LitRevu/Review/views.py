@@ -1,46 +1,82 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Review
 from Tickets.models import Tickets
+from Review.models import Review
 from Tickets.forms import TicketForm
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import get_user_model
 from Review.forms import ReviewForm
 from LitRevu.views import homepage
 from Comment.forms import CommentForm
+from django.core.exceptions import PermissionDenied
+
+User = get_user_model()
 
 
-
+@login_required(login_url="/login")
 def general_feed(request):
     enriched = []
-    reviews = Review.objects.all()
-    tickets = Tickets.objects.all()
-    combined_feed = list(reviews) + list(tickets)
 
+    followed_ids = list(
+        request.user.following.values_list("followed_user__id", flat=True)
+    )
+
+    followed_ids.append(request.user.id)
+
+    blocked = request.user.blocked_user.all()
+    blocked_by = request.user.Blocked_by.all()
+
+    reviews = (
+        Review.objects.filter(user__id__in=followed_ids)
+        .exclude(user__in=blocked)
+        .exclude(user__in=blocked_by)
+    )
+    tickets = (
+        Tickets.objects.filter(user__id__in=followed_ids)
+        .exclude(user__in=blocked)
+        .exclude(user__in=blocked_by)
+    )
+
+    combined_feed = list(reviews) + list(tickets)
     for item in combined_feed:
         item.type = item.__class__.__name__.lower()
         enriched.append(item)
-    return render(request, 'feed.html', {'feed': enriched})
+        enriched.sort(key=lambda x: x.time_created, reverse=True)
+    return render(request, "feed.html", {"feed": enriched})
 
+
+@login_required(login_url="/login")
 def review_page(request, slug):
     review = Review.objects.get(slug=slug)
     if request.method == "POST":
-            form = CommentForm(request.POST)
-            if form.is_valid():
-                comment = form.save(commit=False)
-                comment.review = review
-                comment.save()
-                return redirect('Review:review', slug=slug)
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.review = review
+            comment.user = request.user
+            comment.save()
+            return redirect("Review:review", slug=slug)
     else:
         form = CommentForm()
 
-    comments = review.comments.all()
+    comments = review.comments.all().order_by("-time_created")
 
-    return render(request, 'review_page.html', {'review' : review, 'comment_form' :form, 'comments' : comments})
+    return render(
+        request,
+        "review_page.html",
+        {"review": review, "comment_form": form, "comments": comments},
+    )
 
+
+@login_required(login_url="/login")
 def ticket_page(request, slug):
     ticket = Tickets.objects.get(slug=slug)
-    return render(request, 'ticket_page.html', {'ticket' : ticket})
+    return render(request, "ticket_page.html", {"ticket": ticket})
 
+
+@login_required(login_url="/login")
 def edit_posts(request, slug):
+
     try:
         obj = Tickets.objects.get(slug=slug)
         form_try = TicketForm
@@ -52,32 +88,98 @@ def edit_posts(request, slug):
         template_name = "edit_review.html"
         name = "review"
 
-    if request.method == 'POST':
+    if obj.user != request.user:
+        raise PermissionDenied("Seul l'auteur peut modifié ce post.")
+
+    if request.method == "POST":
         form = form_try(request.POST, instance=obj)
         if form.is_valid():
             form.save()
-            return redirect('feed')
-    else : 
+            return redirect("Review:feed")
+    else:
         form = form_try(instance=obj)
 
-    context = {'form' : form,
-               name : obj,
-               }
+    context = {
+        "form": form,
+        name: obj,
+    }
     return render(request, template_name, context)
 
+
 @login_required(login_url="/login")
-def new_post(request):
-    return render(request, 'new_post.html')
+def create_review_view(request, ticket_id=None):
+    ticket = None
+    ticket_id = request.POST.get("ticket_id") or request.GET.get("ticket_id")
+    if ticket_id:
+        ticket = get_object_or_404(Tickets, id=ticket_id)
 
- 
-# def comment(request, slug):
-#     review = Review.objects.get(slug=slug)
-#     if request.method == "POST":
-#             form = CommentForm(request.POST)
-#             if form.is_valid():
-#                 form.save()
-#                 return redirect(homepage)
-#         else : 
-#             form = TicketForm()
-#         return render(request, "create_tickets.html", {"form" : form })
+    if request.method == "POST":
+        ticket_form = (
+            None
+            if ticket
+            else TicketForm(request.POST, request.FILES) if ticket is None else None
+        )
+        form = ReviewForm(request.POST)
 
+        if form.is_valid() and (ticket or ticket_form.is_valid()):
+            if not ticket:
+                ticket = ticket_form.save(commit=False)
+                ticket.user = request.user
+                ticket.save()
+
+            review = form.save(commit=False)
+            review.user = request.user
+            review.ticket = ticket
+            review.save()
+            return redirect("Review:feed")
+    else:
+        ticket_form = None if ticket else TicketForm()
+        form = ReviewForm()
+    return render(
+        request,
+        "create_review.html",
+        {"ticket": ticket, "ticket_form": ticket_form, "form": form},
+    )
+
+
+@login_required(login_url="/login")
+def my_posts(request, username):
+    if username != request.user.username:
+        return redirect("Review:my-posts", request.user.username)
+
+    user = request.user
+    user_reviews = Review.objects.filter(user=user)
+    user_tickets = Tickets.objects.filter(user=user)
+
+    enriched = []
+    combined = list(user_reviews) + list(user_tickets)
+    for item in combined:
+        item.type = item.__class__.__name__.lower()
+        enriched.append(item)
+        enriched.sort(key=lambda x: x.time_created, reverse=True)
+
+    return render(
+        request,
+        "my_posts.html",
+        {
+            "posts": enriched,
+            "username": user.username,
+        },
+    )
+
+
+def comment(request, slug):
+    review = get_object_or_404(Review, slug=slug)
+
+    if request.method == "POST":
+        form = CommentForm(request.POST)
+        comment = form.save(commit=False)
+        comment.review = review
+        comment.user = request.user
+        comment.save()
+        return redirect("Review:review", slug=review.slug)
+    else:
+        form = CommentForm()
+    return render(
+        request, "comments/create_comment.html", {"form": form, "review": review}
+    )
