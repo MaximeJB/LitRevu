@@ -1,14 +1,13 @@
-from django.shortcuts import render, redirect, get_object_or_404
-from .models import Review
-from Tickets.models import Tickets
-from Review.models import Review
-from Tickets.forms import TicketForm
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth import get_user_model
-from Review.forms import ReviewForm
-from LitRevu.views import homepage
-from Comment.forms import CommentForm
-from django.core.exceptions import PermissionDenied
+from django.shortcuts                   import render, redirect, get_object_or_404
+from .models                            import Review
+from Tickets.models                     import Tickets
+from Review.models                      import Review
+from Tickets.forms                      import TicketForm
+from django.contrib.auth.decorators     import login_required
+from django.contrib.auth                import get_user_model
+from Review.forms                       import ReviewForm
+from Comment.forms                      import CommentForm
+from django.core.exceptions             import PermissionDenied
 
 User = get_user_model()
 
@@ -64,8 +63,7 @@ def review_page(request, slug):
     return render(
         request,
         "review_page.html",
-        {"review": review, "comment_form": form, "comments": comments},
-    )
+        {"review": review, "comment_form": form, "comments": comments})
 
 
 @login_required(login_url="/login")
