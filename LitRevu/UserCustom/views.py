@@ -1,12 +1,9 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect
 from django.contrib.auth import get_user_model, login, logout
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.contrib.auth.forms import AuthenticationForm
-from LitRevu.views import homepage
 from .forms import CustomUserCreationForm
-from django.http import HttpResponseNotAllowed
-from UserFollows.forms import FollowForm
 
 User = get_user_model()
 

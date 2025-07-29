@@ -10,9 +10,5 @@ urlpatterns = [
     path("review/<slug:slug>", views.review_page, name="review"),
     path("edit/<slug:slug>", views.edit_posts, name="edit_posts"),
     path("<slug:username>/posts", views.my_posts, name="my-posts"),
-    path(
-        "tickets/<int:ticket_id>/review/",
-        views.create_review_view,
-        name="ticket-review",
-    ),
+    path("tickets/<int:ticket_id>/review/",views.create_review_view,name="ticket-review",),
 ]

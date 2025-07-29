@@ -42,7 +42,9 @@
                     <div class="description">{{ item.body }}</div>
                     <div class="ticket-block">
                         <div class="ticket-header">
-                            <span class="ticket-title">{{ item.ticket.title }}</span>
+                            <a href="{% url 'Review:ticket' slug=item.ticket.slug %}" class="review-title-link">
+                                <div class="review-title-subtle">
+                            <span class="ticket-title">{{ item.ticket.title }}</span> </div> </a>
                             <span>—</span>
                             <span class="ticket-author">{{ item.ticket.user.username }}</span>
                         </div>

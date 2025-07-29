@@ -1042,3 +1042,14 @@ body:has(.standalone-register-page) nav {
     flex-direction: column;
     gap: 20px;
 }
+.ticket-header .review-title-subtle {
+    display: inline !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+.ticket-header a {
+    text-decoration: none;
+    color: inherit;
+    margin-bottom: 8px !important;
+    display: inline-block !important; /* Nécessaire pour que margin-bottom fonctionne */
+}

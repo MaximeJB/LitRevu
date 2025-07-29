@@ -27,3 +27,6 @@ class Review(models.Model):
             unique = f"{base}-{uuid.uuid4().hex[:6]}"
             self.slug = unique
         super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.title
