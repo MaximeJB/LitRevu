@@ -28,8 +28,10 @@
             </div>
         {% endif %}
         {% if request.user == review.user %}
-            <a href="{% url 'Review:edit_posts' slug=review.slug %}"
-               class="modify-btn">Modifier</a>
+        <div class="post-action-buttons">
+            <a href="{% url 'Review:edit_posts' slug=review.slug %}" class="modify-btn">Modifier</a>
+            <a href="{% url 'Review:delete_post' slug=review.slug %}" class="delete-btn">Supprimer</a>
+        </div>
         {% endif %}
     </div>
     <div class="block comments-section">

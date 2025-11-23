@@ -1,0 +1,41 @@
+
+{% extends 'layout.html' %}
+{% block title %}Supprimer {{ post_type }}{% endblock %}
+{% block content %}
+    <div class="block delete-confirmation">
+        <h2 class="delete-title">Confirmer la suppression</h2>
+        
+        <div class="warning-message">
+            <p><strong>⚠️ Attention !</strong></p>
+            <p>Vous êtes sur le point de supprimer définitivement ce {{ post_type }}.</p>
+            <p>Cette action est <strong>irréversible</strong>.</p>
+        </div>
+
+        <div class="post-preview">
+            {% if post_type == "ticket" %}
+                <h3>Ticket : {{ object.title }}</h3>
+                <p><strong>Description :</strong> {{ object.description|truncatewords:20 }}</p>
+                <p><strong>Créé le :</strong> {{ object.time_created|date:"d/m/Y à H:i" }}</p>
+            {% else %}
+                <h3>Review : {{ object.headline }}</h3>
+                <p><strong>Note :</strong> 
+                    {% for i in "12345" %}
+                        {% if forloop.counter <= object.rating %}★{% else %}☆{% endif %}
+                    {% endfor %}
+                </p>
+                <p><strong>Contenu :</strong> {{ object.body|truncatewords:20 }}</p>
+                <p><strong>Créé le :</strong> {{ object.time_created|date:"d/m/Y à H:i" }}</p>
+            {% endif %}
+        </div>
+
+        <div class="button-container">
+            <form method="post" class="delete-form">
+                {% csrf_token %}
+                <button type="submit" class="delete-btn confirm-delete">
+                    Oui, supprimer définitivement
+                </button>
+            </form>
+            <a href="{% url 'Review:feed' %}" class="cancel-btn">Annuler</a>
+        </div>
+    </div>
+{% endblock %}

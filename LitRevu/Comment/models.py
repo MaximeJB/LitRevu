@@ -9,6 +9,6 @@ class Comment(models.Model):
     )
     user = models.ForeignKey(
         to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE
-    )  # optionnel mais recommandé
+    ) 
     body = models.TextField()
     time_created = models.DateTimeField(auto_now_add=True)

@@ -8,6 +8,7 @@ from django.contrib.auth                import get_user_model
 from Review.forms                       import ReviewForm
 from Comment.forms                      import CommentForm
 from django.core.exceptions             import PermissionDenied
+from django.contrib                     import messages
 
 User = get_user_model()
 
@@ -103,6 +104,34 @@ def edit_posts(request, slug):
     }
     return render(request, template_name, context)
 
+@login_required(login_url="/login")
+def delete_post(request, slug):
+    """Vue pour supprimer un ticket ou une review"""
+    try:
+        obj = Tickets.objects.get(slug=slug)
+        post_type = "ticket"
+    except Tickets.DoesNotExist:
+        try:
+            obj = Review.objects.get(slug=slug)
+            post_type = "review"
+        except Review.DoesNotExist:
+            messages.error(request, "Ce post n'existe pas.")
+            return redirect("Review:feed")
+
+    
+    if obj.user != request.user:
+        raise PermissionDenied("Seul l'auteur peut supprimer ce post.")
+
+    if request.method == "POST":
+        obj.delete()
+        messages.success(request, f"Votre {post_type} a été supprimé avec succès.")
+        return redirect("Review:feed")
+    
+    
+    return render(request, "confirm_delete.html", {
+        "object": obj,
+        "post_type": post_type
+    })
 
 @login_required(login_url="/login")
 def create_review_view(request, ticket_id=None):

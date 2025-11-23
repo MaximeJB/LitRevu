@@ -1,6 +1,8 @@
 # from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import redirect
 
 
 def homepage(request):
-    return render(request, "home.html")
+    if request.user.is_authenticated:
+        return redirect("Review:feed")
+    return redirect("UserCustom:user-login")

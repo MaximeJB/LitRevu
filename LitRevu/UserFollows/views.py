@@ -1,13 +1,12 @@
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import redirect, get_object_or_404, render
-from django.contrib.auth import get_user_model
-from django.contrib import messages
-from .models import UserFollows
-from Tickets.models import Tickets
-from Review.models import Review
-from Comment.models import Comment
-from UserCustom.models import UserApp
-from .forms import FollowForm
+from django.contrib.auth.decorators         import login_required
+from django.shortcuts                       import redirect, get_object_or_404, render
+from django.contrib.auth                    import get_user_model
+from django.contrib                         import messages
+from .models                                import UserFollows
+from Tickets.models                         import Tickets
+from Review.models                          import Review
+from Comment.models                         import Comment
+from .forms                                 import FollowForm
 
 
 User = get_user_model()

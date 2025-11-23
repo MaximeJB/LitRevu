@@ -3,12 +3,18 @@
 {% block content %}
     <section class="ticket-block">
         <h1 class="ticket-title">{{ ticket.title }}</h1>
-        <h2>
-            <a href="{% url 'Review:edit_posts' slug=ticket.slug %}" class="modify-btn">edit</a>
-        </h2>
-        <section>
+        {% if ticket.image %}
+            <div class="ticket-image">
+            <img src="{{ ticket.image.url }}" alt="Image pour {{ ticket.title }}">
+            </div>
+        {% endif %}
+        <div class="post-action-buttons">
+            <a href="{% url 'Review:edit_posts' slug=ticket.slug %}" class="modify-btn">Modifier</a>
+            <a href="{% url 'Review:delete_post' slug=ticket.slug %}" class="delete-btn">Supprimer</a>
+        </div>
+        <div>
             <p>{{ ticket.time_created }}</p>
             <p>{{ ticket.description }}</p>
-        </section>
+        </div>
     </section>
 {% endblock %}

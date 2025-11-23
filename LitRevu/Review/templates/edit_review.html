@@ -4,7 +4,7 @@
     <div class="modify-page">
         <h1>Modifier la review : {{ review.headline }}</h1>
         <div class="modify-container">
-            <form method="post" class="modify-form">
+            <form method="post" class="modify-form" enctype="multipart/form-data">
                 {% csrf_token %}
                 {{ form.as_p }}
                 <div class="submit-container">

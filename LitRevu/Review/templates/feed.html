@@ -49,7 +49,9 @@
                             <span class="ticket-author">{{ item.ticket.user.username }}</span>
                         </div>
                         <div class="ticket-description">{{ item.ticket.description }}</div>
-                        {% if item.ticket.image %}<img src="{{ item.ticket.image.url }}" alt="{{ item.ticket.title }}">{% endif %}
+                        {% if item.ticket.image %}
+                        <img src="{{ item.ticket.image.url }}" alt="{{ item.ticket.title }}">
+                        {% endif %}
                     </div>
                 </div>
             {% elif item.type == "tickets" %}
@@ -60,7 +62,9 @@
                     </div>
                     <div class="title">{{ item.title }}</div>
                     <div class="description">{{ item.description }}</div>
-                    {% if item.image %}<img src="{{ item.image.url }}" alt="{{ item.title }}">{% endif %}
+                    {% if item.image %}
+                    <img src="{{ item.image.url }}" alt="{{ item.title }}">
+                    {% endif %}
                     <a href="{% url 'Review:create-review' %}?ticket_id={{ item.id }}"
                        class="ticket-review-btn">Créer une critique</a>
                 </div>
