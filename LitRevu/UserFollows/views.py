@@ -60,7 +60,6 @@ def profile_view(request, username):
             "reviews_count": reviews_count,
             "tickets_count": tickets_count,
             "latest_comments": latest_comments,
-            "is following": is_following,
             "following": following,
             "followers": followers,
             "search_form": FollowForm(),

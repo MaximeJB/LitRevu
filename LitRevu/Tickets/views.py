@@ -1,5 +1,7 @@
-from django.shortcuts               import render, redirect
+from django.shortcuts               import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions         import PermissionDenied
+from LitRevu.Tickets.models import Tickets
 from Tickets.forms                  import TicketForm
 
 @login_required(login_url="/login")
@@ -9,7 +11,7 @@ def create_ticket_view(request):
         if form.is_valid():
             ticket = form.save(commit=False)
             ticket.user = request.user
-            form.save()
+            ticket.save()
             return redirect("Review:feed")
     else:
         form = TicketForm()
@@ -18,6 +20,16 @@ def create_ticket_view(request):
 
 @login_required(login_url="/login")
 def edit_ticket(request, slug):
-    ticket = TicketForm.objects.get(slug=slug)
-    form = TicketForm(instance=ticket)
+    ticket = get_object_or_404(Tickets, slug=slug)
+
+    if ticket.user != request.user:
+        raise PermissionDenied("Vous ne pouvez éditer que vos propres tickets.")
+    
+    if request.method == "POST":
+        form = TicketForm(request.POST, request.FILES, instance=ticket)
+        if form.is_valid():
+            form.save()
+            return redirect("Review:ticket", slug=ticket.slug)
+    else:
+        form = TicketForm(instance=ticket)
     return render(request, "edit_tickets.html", {"form": form})

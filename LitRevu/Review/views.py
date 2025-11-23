@@ -1,5 +1,4 @@
 from django.shortcuts                   import render, redirect, get_object_or_404
-from .models                            import Review
 from Tickets.models                     import Tickets
 from Review.models                      import Review
 from Tickets.forms                      import TicketForm
@@ -41,13 +40,13 @@ def general_feed(request):
     for item in combined_feed:
         item.type = item.__class__.__name__.lower()
         enriched.append(item)
-        enriched.sort(key=lambda x: x.time_created, reverse=True)
+    enriched.sort(key=lambda x: x.time_created, reverse=True)
     return render(request, "feed.html", {"feed": enriched})
 
 
 @login_required(login_url="/login")
 def review_page(request, slug):
-    review = Review.objects.get(slug=slug)
+    review = get_object_or_404(Review, slug=slug)
     if request.method == "POST":
         form = CommentForm(request.POST)
         if form.is_valid():
@@ -69,7 +68,7 @@ def review_page(request, slug):
 
 @login_required(login_url="/login")
 def ticket_page(request, slug):
-    ticket = Tickets.objects.get(slug=slug)
+    ticket = get_object_or_404(Tickets, slug=slug)
     return render(request, "ticket_page.html", {"ticket": ticket})
 
 
@@ -77,24 +76,26 @@ def ticket_page(request, slug):
 def edit_posts(request, slug):
 
     try:
-        obj = Tickets.objects.get(slug=slug)
+        obj = get_object_or_404(Tickets,slug=slug)
         form_try = TicketForm
         template_name = "edit_tickets.html"
         name = "ticket"
+        redirect_url = "Review:ticket"
     except Tickets.DoesNotExist:
-        obj = Review.objects.get(slug=slug)
+        obj = get_object_or_404(Review, slug=slug)
         form_try = ReviewForm
         template_name = "edit_review.html"
         name = "review"
+        redirect_url = "Review:review"
 
     if obj.user != request.user:
-        raise PermissionDenied("Seul l'auteur peut modifié ce post.")
+        raise PermissionDenied("Seul l'auteur peut modifier ce post.")
 
     if request.method == "POST":
-        form = form_try(request.POST, instance=obj)
+        form = form_try(request.POST, request.FILES, instance=obj)
         if form.is_valid():
             form.save()
-            return redirect("Review:feed")
+            return redirect(redirect_url, slug=obj.slug)
     else:
         form = form_try(instance=obj)
 
@@ -141,11 +142,7 @@ def create_review_view(request, ticket_id=None):
         ticket = get_object_or_404(Tickets, id=ticket_id)
 
     if request.method == "POST":
-        ticket_form = (
-            None
-            if ticket
-            else TicketForm(request.POST, request.FILES) if ticket is None else None
-        )
+        ticket_form = None if ticket else TicketForm(request.POST, request.FILES)
         form = ReviewForm(request.POST)
 
         if form.is_valid() and (ticket or ticket_form.is_valid()):
@@ -183,7 +180,7 @@ def my_posts(request, username):
     for item in combined:
         item.type = item.__class__.__name__.lower()
         enriched.append(item)
-        enriched.sort(key=lambda x: x.time_created, reverse=True)
+    enriched.sort(key=lambda x: x.time_created, reverse=True)
 
     return render(
         request,

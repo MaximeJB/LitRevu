@@ -16,8 +16,8 @@ class UserFollows(models.Model):
         return f"{self.user} suit {self.followed_user}"
 
 
-class Meta:
-    unique_together = (
-        "user",
-        "followed_user",
-    )
+    class Meta:
+        unique_together = (
+            "user",
+            "followed_user",
+        )

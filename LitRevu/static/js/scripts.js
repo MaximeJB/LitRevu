@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 5000);
     });
 });
-const ratingOptions = document.querySelectorAll('.rating-option');
+    const ratingOptions = document.querySelectorAll('.rating-option');
     
     ratingOptions.forEach(option => {
         option.addEventListener('click', function() {
